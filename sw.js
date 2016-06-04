@@ -22,20 +22,22 @@ self.addEventListener('activate', function(event){
 
 
 self.addEventListener('fetch', function(event){
-    // Just fetch for non-audio
-    if (event.request.url.indexOf('audio.mp3') === -1)
+    if (event.request.url.indexOf('audio.mp3') === -1){
+        // Just fetch for non-audio
         event.respondWith(fetch(event.request))
-    // Return cached audio
-    event.respondWith(
-        caches.match('audio.mp3').then(function(response){
-            if (event.request.url.endsWith('?ranged')){
-                console.log('Audio: Returning ranged response')
-                return rangeable_resp(event.request, response)
-            }
-            console.log('Audio: Returning regular response')
-            return response
-        })
-    )
+    } else {
+        // Return cached audio
+        event.respondWith(
+            caches.match('audio.mp3').then(function(response){
+                if (event.request.url.endsWith('?ranged')){
+                    console.log('Audio: Returning ranged response')
+                    return rangeable_resp(event.request, response)
+                }
+                console.log('Audio: Returning regular response')
+                return response
+            })
+        )
+    }
 })
 
 
