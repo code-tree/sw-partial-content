@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+    <title>Service worker and ranged responses</title>
+    <script>
+        navigator.serviceWorker.register('sw.js')
+    </script>
+</head>
+<body>
+    <h1>Service worker and ranged responses</h1>
+    <p><strong>The problem:</strong> Service worker spec does not currently include any way to handle 206 partial content requests ('range' header). When the browser requests a ranged response, Chrome 52 stops playing e.g. audio or video, and may throw errors too.
+    <p><strong>Work-around:</strong> Manually implement a ranged response during fetch event.
+    <h2>Test audio</h2>
+    <p>Try randomly moving the play location (while playing the audio), which should trigger a range request in Chrome.
+    <p>
+        Served by SW without any range support.
+        <br>
+        <audio controls src='audio.mp3'></audio>
+    </p>
+    <p>
+        Served by SW with (limited) range support.
+        <br>
+        <audio controls src='ranged_audio.mp3'></audio>
+    </p>
+    <h2>Also see</h2>
+    <ul>
+        <li><a href='http://stackoverflow.com/questions/37612177/cannot-play-cached-audio-from-service-worker'>http://stackoverflow.com/questions/37612177/cannot-play-cached-audio-from-service-worker</a>
+        <li><a href='https://github.com/whatwg/fetch/issues/144'>https://github.com/whatwg/fetch/issues/144</a>
+        <li><a href='https://github.com/slightlyoff/ServiceWorker/issues/703'>https://github.com/slightlyoff/ServiceWorker/issues/703</a>
+    </ul>
+</body>
+</html>
