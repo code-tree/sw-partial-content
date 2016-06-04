@@ -5,10 +5,20 @@
 self.addEventListener('install', function(event){
     event.waitUntil(
         caches.open('test').then(function(cache){
+            // NOTE: Only caching audio as offline support not necessary for test
             return cache.addAll(['audio.mp3', 'ranged_audio.mp3'])
+        }).then(function(){
+            return self.skipWaiting()
         })
-    );
-});
+    )
+})
+
+
+self.addEventListener('activate', function(event){
+    event.waitUntil(self.clients.claim().then(function(){
+        console.log('SW activated')
+    }))
+})
 
 
 self.addEventListener('fetch', function(event){
@@ -21,8 +31,8 @@ self.addEventListener('fetch', function(event){
             }
             return fetch(event.request)
         })
-    );
-});
+    )
+})
 
 
 function rangeable_resp(request, resp){
