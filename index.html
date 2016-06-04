@@ -9,7 +9,7 @@
 <body>
     <h1>Service worker and ranged responses</h1>
     <p><strong>The problem:</strong> Service worker spec does not currently include any way to handle 206 partial content requests ('range' header). When the browser requests a ranged response, Chrome 52 stops playing e.g. audio or video, and may throw errors too.
-    <p><strong>Work-around:</strong> Manually implement a ranged response during fetch event (based on [this sample page](https://samdutton.github.io/samples/service-worker/prefetch-video/)).
+    <p><strong>Work-around:</strong> Manually implement a ranged response during fetch event (based on <a href='https://samdutton.github.io/samples/service-worker/prefetch-video/'>this sample page</a>).
     <h2>Test audio</h2>
     <p>After the SW has installed and is controlling the page, try randomly moving the play location (while playing the audio), which should trigger a range request in Chrome.
     <p>
