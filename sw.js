@@ -6,7 +6,7 @@ self.addEventListener('install', function(event){
     event.waitUntil(
         caches.open('test').then(function(cache){
             // NOTE: Only caching audio as offline support not necessary for test
-            return cache.addAll(['audio.mp3', 'ranged_audio.mp3'])
+            return cache.addAll(['audio.mp3'])
         }).then(function(){
             return self.skipWaiting()
         })
@@ -22,14 +22,18 @@ self.addEventListener('activate', function(event){
 
 
 self.addEventListener('fetch', function(event){
+    // Just fetch for non-audio
+    if (event.request.url.indexOf('audio.mp3') === -1)
+        event.respondWith(fetch(event.request))
+    // Return cached audio
     event.respondWith(
-        caches.match(event.request).then(function(response){
-            if (response){
-                if (event.request.url.indexOf('ranged') > -1)
-                    return rangeable_resp(event.request, response)
-                return response
+        caches.match('audio.mp3').then(function(response){
+            if (event.request.url.endsWith('?ranged')){
+                console.log('Audio: Returning ranged response')
+                return rangeable_resp(event.request, response)
             }
-            return fetch(event.request)
+            console.log('Audio: Returning regular response')
+            return response
         })
     )
 })
